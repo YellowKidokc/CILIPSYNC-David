@@ -6,6 +6,17 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+  :root {
+    --bg: #07070b;
+    --surface: #0f1018;
+    --surface-raised: #151826;
+    --line: #24283b;
+    --line-bright: #2f3550;
+    --text: #ced3dd;
+    --text-subtle: #737c95;
+    --accent: #f59e0b;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   ::-webkit-scrollbar { width: 6px; }
@@ -15,20 +26,33 @@
 
   body {
     font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
-    background: #0a0a0f;
-    color: #c8ccd4;
+    background: radial-gradient(circle at 20% -10%, #1a1e32 0%, var(--bg) 42%), var(--bg);
+    color: var(--text);
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     user-select: none;
+    padding: 12px;
+  }
+
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--surface) 92%, black);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
   }
 
   /* Header */
   .header {
     padding: 12px 16px 10px;
-    border-bottom: 1px solid #1e1e2e;
-    background: #0d0d14;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #111321 0%, #0d0f19 100%);
     flex-shrink: 0;
   }
   .header-top {
@@ -41,10 +65,26 @@
     display: flex; align-items: center; gap: 8px;
   }
   .brand-tag {
-    font-size: 10px; letter-spacing: 3px; color: #f59e0b; font-weight: 700;
+    font-size: 10px; letter-spacing: 3px; color: var(--accent); font-weight: 700;
   }
-  .brand-sep { font-size: 11px; color: #2a2a3a; }
-  .brand-sub { font-size: 10px; letter-spacing: 2px; color: #444; }
+  .brand-sep { font-size: 11px; color: #3c425f; }
+  .brand-sub { font-size: 10px; letter-spacing: 2px; color: var(--text-subtle); }
+
+  .toolbar-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 9px;
+    letter-spacing: 1.1px;
+    color: var(--text-subtle);
+    margin-top: 10px;
+  }
+
+  .toolbar-meta strong {
+    color: var(--text);
+    font-weight: 600;
+  }
 
   /* Search */
   .search-wrap {
@@ -56,28 +96,29 @@
   }
   .search-input {
     width: 100%;
-    background: #12121c;
-    border: 1px solid #1e1e2e;
+    background: #121524;
+    border: 1px solid var(--line);
     border-radius: 6px;
     padding: 7px 10px 7px 34px;
     font: 11px 'IBM Plex Mono', monospace;
-    color: #c8ccd4;
+    color: var(--text);
     letter-spacing: 0.3px;
     outline: none;
     transition: all 0.15s;
   }
   .search-input::placeholder { color: #3a3a4a; }
   .search-input:focus {
-    background: #14141e;
-    border-color: #2a2a3e;
+    background: #171a2a;
+    border-color: var(--line-bright);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
   }
   .search-input:focus + svg { color: #4a4a5a; }
 
   /* Tabs */
   .tabs {
     padding: 0 16px;
-    background: #0a0a0f;
-    border-bottom: 1px solid #1e1e2e;
+    background: #0b0d15;
+    border-bottom: 1px solid var(--line);
     display: flex;
     gap: 2px;
     overflow-x: auto;
@@ -98,8 +139,8 @@
   }
   .tab:hover { color: #888; }
   .tab.active {
-    color: #f59e0b;
-    border-bottom-color: #f59e0b;
+    color: var(--accent);
+    border-bottom-color: var(--accent);
   }
   .tab-count {
     font-size: 8px;
@@ -112,6 +153,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 20px;
+    background: linear-gradient(180deg, rgba(8, 9, 15, 0) 0%, rgba(8, 9, 15, 0.65) 100%);
   }
 
   /* Grid */
@@ -123,8 +165,8 @@
 
   /* Link card */
   .link-card {
-    background: #12121c;
-    border: 1px solid #1e1e2e;
+    background: linear-gradient(180deg, #121524 0%, #101321 100%);
+    border: 1px solid var(--line);
     border-radius: 6px;
     padding: 12px;
     cursor: pointer;
@@ -132,8 +174,8 @@
     position: relative;
   }
   .link-card:hover {
-    background: #14141e;
-    border-color: #2a2a3e;
+    background: linear-gradient(180deg, #161a2b 0%, #131728 100%);
+    border-color: var(--line-bright);
     transform: translateY(-1px);
   }
   .link-card.hidden {
@@ -142,13 +184,31 @@
 
   .link-title {
     font-size: 11px;
-    color: #c8ccd4;
+    color: var(--text);
     margin-bottom: 6px;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .link-hostline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .link-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-size: 9px;
+    color: var(--accent);
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
   }
 
   .link-meta {
@@ -160,8 +220,13 @@
 
   .link-domain {
     font-size: 9px;
-    color: #555;
+    color: var(--text-subtle);
     letter-spacing: 0.5px;
+  }
+
+  .link-open {
+    color: #4f5770;
+    font-size: 11px;
   }
 
   .link-category {
@@ -188,31 +253,48 @@
     letter-spacing: 1px;
   }
 
+  .footer-note {
+    padding: 8px 16px 10px;
+    border-top: 1px solid var(--line);
+    font-size: 9px;
+    letter-spacing: 0.8px;
+    color: #596079;
+    background: #090b12;
+  }
+
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div class="brand">
-      <span class="brand-tag">POF 2828</span>
-      <span class="brand-sep">━</span>
-      <span class="brand-sub">RESEARCH LINKS</span>
+<div class="app-shell">
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <span class="brand-tag">POF 2828</span>
+        <span class="brand-sep">━</span>
+        <span class="brand-sub">RESEARCH LINKS</span>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5.5" cy="5.5" r="4"/><path d="M8.5 8.5L12 12"/></svg>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search links, domains, categories...">
+    </div>
+    <div class="toolbar-meta">
+      <div><strong id="visibleCount">0</strong> visible links</div>
+      <div>Esc closes window • Click card to open source</div>
     </div>
   </div>
-  <div class="search-wrap">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5.5" cy="5.5" r="4"/><path d="M8.5 8.5L12 12"/></svg>
-    <input type="text" class="search-input" id="searchInput" placeholder="Search links...">
+
+  <div class="tabs" id="tabsContainer">
+    <button class="tab active" data-category="all">ALL <span class="tab-count"></span></button>
   </div>
-</div>
 
-<div class="tabs" id="tabsContainer">
-  <button class="tab active" data-category="all">ALL <span class="tab-count"></span></button>
-</div>
+  <div class="content">
+    <div class="links-grid" id="linksGrid"></div>
+    <div class="no-results" id="noResults" style="display:none;">No links found</div>
+  </div>
 
-<div class="content">
-  <div class="links-grid" id="linksGrid"></div>
-  <div class="no-results" id="noResults" style="display:none;">No links found</div>
+  <div class="footer-note">Tip: use category tabs + search together for faster triage.</div>
 </div>
 
 <script>
@@ -222,6 +304,7 @@ const tabsContainer = document.getElementById('tabsContainer');
 const linksGrid = document.getElementById('linksGrid');
 const searchInput = document.getElementById('searchInput');
 const noResults = document.getElementById('noResults');
+const visibleCount = document.getElementById('visibleCount');
 
 // Get unique categories
 const categories = ['all', ...new Set(linksData.map(link => link.category))];
@@ -259,6 +342,7 @@ function renderLinks() {
   });
 
   linksGrid.innerHTML = '';
+  visibleCount.textContent = filtered.length;
   
   if (filtered.length === 0) {
     noResults.style.display = 'block';
@@ -270,10 +354,15 @@ function renderLinks() {
   filtered.forEach(link => {
     const card = document.createElement('div');
     card.className = 'link-card';
+    const icon = (link.domain || '?').charAt(0).toUpperCase();
     card.innerHTML = `
       <div class="link-title">${link.title}</div>
       <div class="link-meta">
-        <div class="link-domain">${link.domain}</div>
+        <div class="link-hostline">
+          <span class="link-icon">${icon}</span>
+          <div class="link-domain">${link.domain}</div>
+        </div>
+        <div class="link-open">↗</div>
         <div class="link-category category-${link.category.toLowerCase()}">${link.category}</div>
       </div>
     `;
